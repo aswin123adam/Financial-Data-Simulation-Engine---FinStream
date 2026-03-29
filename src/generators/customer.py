@@ -86,8 +86,6 @@ class CustomerGenerator:
             credit = self.CREDIT_SCORE_RANGES[segment]
             credit_score = random.randint(credit[0], credit[1])
 
-            print(f"Generated Customer: {segment.value} , income: {income:,.2f}, credit_score: {credit_score}")
-
             #Generating FAke Customer Information : 
             first_name = self.fake.first_name()
             last_name = self.fake.last_name()
@@ -101,11 +99,76 @@ class CustomerGenerator:
 
             # TESTING print(f"Generated Customer:\nFull Name: {first_name} {last_name},\nemail: {email} ,\nphone: {phone},\nDOB: {date_of_birth},\ncity: {city},\nstate: {state},\ncountry: {country},\ncustomer_since: {customer_since},\nGenerated Customer: {segment.value} ,\nincome: {income:,.2f},\ncredit_score: {credit_score}")
 
-            return None
+            return Customer(
+                first_name=first_name,
+                last_name=last_name,
+                email=email,
+                phone=phone,
+                date_of_birth=date_of_birth,
+                city=city,
+                state=state,
+                country=country,
+                annual_income=income,
+                credit_score=credit_score,
+                credit_tier=self.generate_credit_tier(credit_score),
+                customer_segment=segment,
+                customer_since=customer_since
+            )
+    def generate_email(self, first_name: str, last_name: str) -> str:
+        domain_list = ["gmail.com", "outlook.com", "yahoo.com", "hotmail.com", "aol.com", "protonmail.com", "zoho.com", "mail.com", "gmx.com", "icloud.com", "yandex.com", "fastmail.com", "tutanota.com", "mail.ru", "hushmail.com", "airmail.net", "lycos.com", "netcourrier.com", "zimbra.com", "rediffmail.com", "mailinator.com", "freemail.de", "freemail.ru", "email.com", "email.org", "email.ru", "freeneted.de", "bigpond.com", "verizon.net", "sky.com"]
+        domain = random.choice(domain_list)
+        first = first_name.lower().replace(" ", "")
+        last = last_name.lower().replace(" ", "")
+
+        num = random.randint(1, 999)
+
+        patterns = [
+            f"{first}.{last}",
+            f"{first}{last}",
+            f"{first}{last}{num}",
+            f"{first}.{last}{num}",
+            f"{first}_{last}{num}",
+            f"{first[0]}{last}",
+            f"{first[0]}.{last}{num}",
+            f"{first[0]}_{last}{num}",
+            f"{first}{last[0]}",
+            f"{first}.{last[0]}{num}",
+            f"{first}_{last[0]}{num}",
+            f"{last}.{first}",
+            f"{last}{first}",
+            f"{last}{first}{num}",
+            f"{last}.{first}{num}",
+            f"{last}_{first}{num}",
+            f"{last[0]}{first}",
+            f"{last[0]}.{first}{num}",
+            f"{last[0]}_{first}{num}",
+            f"{last}{first[0]}",
+            f"{last}.{first[0]}{num}",
+            f"{last}_{first[0]}{num}",
+        ]
+
+        pattern = random.choice(patterns)
+        return f"{pattern}@{domain}"
+
+
+
 
 
 if __name__ == "__main__":
-    generator = CustomerGenerator()
+    # generator = CustomerGenerator()
 
-    print("Testing SEGMENT_WEIGHTS distribution:")
-    generator.generate_customer()
+    # print("Testing SEGMENT_WEIGHTS distribution:")
+
+    # generator.generate_customer()
+    # for _ in range(3):
+    #     customer = generator.generate_customer()
+    #     print(f"Generated Customer:\nFull Name: {customer.first_name} {customer.last_name},\nemail: {customer.email} ,\nphone: {customer.phone},\nDOB: {customer.date_of_birth},\ncity: {customer.city},\nstate: {customer.state},\ncountry: {customer.country},\ncustomer_since: {customer.customer_since},\nGenerated Customer: {customer.customer_segment.value} ,\nincome: {customer.annual_income:,.2f},\ncredit_score: {customer.credit_score}")
+    #     print("-" * 80)
+    #     print("-" * 80)
+
+    test_name = [("Adam", "Christo"), ("Aswin", "Muthusamy"), ("Ganga", "Hariharan")]
+
+    for first,last in test_name:
+        for _ in range(3):
+            email = CustomerGenerator().generate_email(first, last)
+            print(f"Generated Email for {first} {last}: {email}")
